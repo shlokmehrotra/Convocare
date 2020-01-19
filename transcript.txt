@@ -1,6 +1,6 @@
 TRANSCRIPT
 ___________
-Doctor: prescribed 3 milligrams of ibuprofen and log of blood pressure at three meters per second
-Patient:  you Doctor Calvin
+Doctor: prescribed 9 mg of ibuprofen and log blood pressure as 50 / 40
+Patient:  good
 LOG
 ___________
