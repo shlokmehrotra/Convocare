@@ -38,7 +38,7 @@ def on_connect(client, userdata, flags, rc):
 
 def record_audio():
     global f_kill
-    f_kill = subprocess.Popen(["python","record_audio.py"])
+    f_kill = subprocess.Popen(["python","/home/pi/Convocare/record_audio.py"])
 
 def stop_record_audio():
     f_kill.terminate()
