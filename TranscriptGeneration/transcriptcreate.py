@@ -88,7 +88,7 @@ def transcript_gen():
 
 
 
-pswd = open('pswd_IGNORE.txt','r').read().strip().split("\n")
+pswd = open('TranscriptGeneration/pswd_IGNORE.txt','r').read().strip().split("\n")
 gmail_user = pswd[0]
 gmail_psd = pswd[1]
 #gmail_password = pswd.readline().strip()
