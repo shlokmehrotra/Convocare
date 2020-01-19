@@ -8,5 +8,7 @@ while True:
   if (GPIO.input(26) == GPIO.HIGH):
     print("Button pressed")
     time.sleep(1)
-    os.system("fswebcam /home/pi/bp.img")
-
+    fname = "home/pi/bp.img"
+    os.system("fswebcam "+fname)
+    time.sleep(1)
+    os.system("python imageclassify.py -i "+fname)
