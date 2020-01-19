@@ -1,6 +1,6 @@
 TRANSCRIPT
 ___________
-Doctor: testing testing
-Patient:  2 3
+Doctor: prescribed 3 milligrams of ibuprofen and log of blood pressure at three meters per second
+Patient:  you Doctor Calvin
 LOG
 ___________
