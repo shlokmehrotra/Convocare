@@ -1,0 +1,6 @@
+TRANSCRIPT
+___________
+Doctor: testing testing
+Patient:  2 3
+LOG
+___________
