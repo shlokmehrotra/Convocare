@@ -17,7 +17,7 @@ def speech2text(local_file_path):
     enable_speaker_diarization = True
 
     # Optional. Specifies the estimated number of speakers in the conversation.
-    diarization_speaker_count = 2
+    diarization_speaker_count = 3
 
     # The language of the supplied audio
     language_code = "en-US"

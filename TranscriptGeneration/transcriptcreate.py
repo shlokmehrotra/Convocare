@@ -18,7 +18,7 @@ def transcript_gen():
 	"""
 
 	print("converting to transcript")
-	speech = os.path.join("/Users/shubhamkumar/Desktop/git-repos/kronos", "new_doctor.wav")
+	speech = os.path.join("/Users/shubhamkumar/Desktop/git-repos/Convocare", "new_doctor.wav")
 
 	conversation_array = speech2text(speech)
 
@@ -89,14 +89,13 @@ def transcript_gen():
 
 
 pswd = open('TranscriptGeneration/pswd_IGNORE.txt','r').read().strip().split("\n")
-gmail_user = pswd[0]
-gmail_psd = pswd[1]
-#gmail_password = pswd.readline().strip()
+gmail_user = pswd[0].strip()
+gmail_psd = pswd[1].strip()
 
 #send email to pharmacy
 def send_email():
     #try:
-    server = smtplib.SMTP_SSL('smtp.gmail.com',465)
+    server = smtplib.SMTP_SSL("smtp.gmail.com",465)
     server.ehlo()
     server.login(gmail_user, gmail_psd)#gmail_password)
     #except Exception as e:

@@ -16,15 +16,7 @@ def start():
     print("generating transcript")
     global blood_pressure, heart_rate
     # metrics = os.system("python TranscriptGeneration/transcript_create.py")
-    time.sleep(15)
-    metrics = transcript_gen()
-    print(type(metrics), len(metrics))
-    blood_pressure = str(metrics[0])
-    heart_rate = str(metrics[1])
-    print("done generating transcript")
-    print("sending email")
-    send_email()
-    print("sent email")
+#    time.sleep(15)
     return render_template("START.html")
 
 @app.route('/metrics')
@@ -34,6 +26,19 @@ def metrics():
 
 @app.route('/transcript')
 def transcript():
+    if os.path.exists("new_doctor.wav"):
+        pass
+    else:
+        time.sleep(10)
+    metrics = transcript_gen()
+    os.remove("new_doctor.wav")
+    print(type(metrics), len(metrics))
+    blood_pressure = str(metrics[0])
+    heart_rate = str(metrics[1])
+    print("done generating transcript")
+    print("sending email")
+    send_email()
+    print("sent email")
     fin = open("transcript.txt","r")
     return fin.read()
 

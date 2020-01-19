@@ -38,7 +38,7 @@ def on_message(client, userdata, msg):
     f = open('new_doctor.wav', 'wb')
     f.write(msg.payload)
     f.close()
-    # os.system("afplay new_doctor.wav")
+    os.system("afplay new_doctor.wav")
 
 if len(sys.argv) > 1 and sys.argv[1] == '-d':
     DEBUG = True

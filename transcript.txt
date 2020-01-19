@@ -1,6 +1,6 @@
 TRANSCRIPT
 ___________
-Doctor: testing testing
-Patient:  2 3
+Doctor: prescribed 9 mg of ibuprofen and log blood pressure as 50 / 40
+Patient:  good
 LOG
 ___________
