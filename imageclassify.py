@@ -3,9 +3,7 @@ from imutils.perspective import four_point_transform
 from imutils import contours
 import imutils
 import cv2
- 
-# define the dictionary of digit segments so we can identify
-# each digit on the thermostat
+import numpy as np
 DIGITS_LOOKUP = {
 	(1, 1, 1, 0, 1, 1, 1): 0,
 	(0, 0, 1, 0, 0, 1, 0): 1,
@@ -19,8 +17,10 @@ DIGITS_LOOKUP = {
 	(1, 1, 1, 1, 0, 1, 1): 9
 }
 
-# load the example image
-image = cv2.imread("prenk1.jpg")
+filename = "prenk.JPG"
+image = cv2.imread(filename)
+fileType = "." + filename.split('.')[1]
+print(fileType)
  
 # pre-process the image by resizing it, converting it to
 # graycale, blurring it, and computing an edge map
@@ -32,7 +32,7 @@ edged = cv2.Canny(blurred, 50, 200, 255)
 # find contours in the edge map, then sort them by their
 # size in descending order
 cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL,
-cv2.CHAIN_APPROX_SIMPLE)
+	cv2.CHAIN_APPROX_SIMPLE)
 cnts = imutils.grab_contours(cnts)
 cnts = sorted(cnts, key=cv2.contourArea, reverse=True)
 displayCnt = None
@@ -48,17 +48,18 @@ for c in cnts:
 	if len(approx) == 4:
 		displayCnt = approx
 		break
-# extract the thermostat display, apply a perspective transform
-# to it
 warped = four_point_transform(gray, displayCnt.reshape(4, 2))
 output = four_point_transform(image, displayCnt.reshape(4, 2))
+cv2.imwrite('newprenk' + fileType,warped)
 
 # threshold the warped image, then apply a series of morphological
 # operations to cleanup the thresholded image
+
 thresh = cv2.threshold(warped, 0, 255,
-cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
+	cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
 kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (1, 5))
 thresh = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
+cv2.imwrite('newestprenk' + fileType, thresh)
 
 # find contours in the thresholded image, then initialize the
 # digit contours lists
@@ -73,17 +74,41 @@ for c in cnts:
 	(x, y, w, h) = cv2.boundingRect(c)
  
 	# if the contour is sufficiently large, it must be a digit
-	if w >= 15 and (h >= 30 and h <= 40):
+	if w >= 5 and (h >= 5 and h <= 50):
 		digitCnts.append(c)
-
-
 # sort the contours from left-to-right, then initialize the
 # actual digits themselves
 digitCnts = contours.sort_contours(digitCnts,
 	method="left-to-right")[0]
 digits = []
 
-# loop over the segments
+print("pnenks")
+print(digitCnts)
+# loop over each of the digits
+for c in digitCnts:
+	# extract the digit ROI
+	(x, y, w, h) = cv2.boundingRect(c)
+	roi = thresh[y:y + h, x:x + w]
+	print("1")
+	# compute the width and height of each of the 7 segments
+	# we are going to examine
+	(roiH, roiW) = roi.shape
+	(dW, dH) = (int(roiW * 0.25), int(roiH * 0.15))
+	dHC = int(roiH * 0.05)
+	print("2")
+	# define the set of 7 segments
+	segments = [
+		((0, 0), (w, dH)),	# top
+		((0, 0), (dW, h // 2)),	# top-left
+		((w - dW, 0), (w, h // 2)),	# top-right
+		((0, (h // 2) - dHC) , (w, (h // 2) + dHC)), # center
+		((0, h // 2), (dW, h)),	# bottom-left
+		((w - dW, h // 2), (w, h)),	# bottom-right
+		((0, h - dH), (w, h))	# bottom
+	]
+	on = [0] * len(segments)
+	# loop over the segments
+	print("abruh")
 	for (i, ((xA, yA), (xB, yB))) in enumerate(segments):
 		# extract the segment ROI, count the total number of
 		# thresholded pixels in the segment, and then compute
@@ -94,12 +119,26 @@ digits = []
  
 		# if the total number of non-zero pixels is greater than
 		# 50% of the area, mark the segment as "on"
-		if total / float(area) > 0.5:
-			on[i]= 1
- 
+		try:
+			if total / float(area) > 0.5:
+				on[i]= 1
+		except:
+			continue
+ 	
 	# lookup the digit and draw it on the image
-	digit = DIGITS_LOOKUP[tuple(on)]
-	digits.append(digit)
-	cv2.rectangle(output, (x, y), (x + w, y + h), (0, 255, 0), 1)
-	cv2.putText(output, str(digit), (x - 10, y - 10),
+	try:	
+		digit = DIGITS_LOOKUP[tuple(on)]
+		digits.append(digit)
+		cv2.rectangle(output, (x, y), (x + w, y + h), (0, 255, 0), 1)
+		cv2.putText(output, str(digit), (x - 10, y - 10),
 		cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 255, 0), 2)
+		print(u"{}{}.{} \u00b0C".format(*digits))
+	except:
+		print("Unrecognizable. Try Again!")
+		print(u"{}{}.{} \u00b0C".format(*digits))
+		exit()
+	
+
+print("do the chaitu")
+cv2.imwrite('hohogardprenk' + fileType, output)
+print("completed")
