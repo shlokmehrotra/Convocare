@@ -6,11 +6,11 @@ import ssl
 import logging
 import time
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(26, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+#GPIO.setmode(GPIO.BCM)
+#GPIO.setup(26, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 DELAY_BETWEEN_PUBLISH = 120
-
+connected = False
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
     global connected
@@ -28,7 +28,8 @@ client.on_connect = on_connect
 client.on_disconnect = on_disconnect
 client.enable_logger()
 client.username_pw_set(username="vishakh_arora29", password="ffa063303c8d4dcdae4ffc002e22c583")
-client.tls_set_context()
+context_ssl = ssl.create_default_context()
+client.tls_set_context(context=context_ssl)
 #client.tls_set("/etc/ssl/certs/ca-certificates.crt")
 #, tls_version=ssl.PROTOCOL_TLSv1_2)
 try:
@@ -55,8 +56,7 @@ while True:
 #          print("Publishing heart rate " + heart_rate)
 #        client.publish( 'vishakh_arora29/feeds/heart-rate',  payload=heart_rate)
 #        time.sleep(DELAY_BETWEEN_PUBLISH)
-          print("Publishing blood pressure " + blood_pres)
-          client.publish('vishakh_arora29/feeds/blood-pressure', payload=bp_val)
+          client.publish('vishakh_arora29/feeds/blood-pressure', payload=str(bp_val))
           time.sleep(DELAY_BETWEEN_PUBLISH)
       except Exception as e:
           print("Error publishing:" + str(e))
