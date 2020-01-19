@@ -26,7 +26,12 @@ def metrics():
 
 @app.route('/transcript')
 def transcript():
+    if os.path.exists("new_doctor.wav"):
+        pass
+    else:
+        time.sleep(10)
     metrics = transcript_gen()
+    os.remove("new_doctor.wav")
     print(type(metrics), len(metrics))
     blood_pressure = str(metrics[0])
     heart_rate = str(metrics[1])
