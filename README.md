@@ -1,7 +1,7 @@
-# Kronos
+# Convocare
 A voice powered healthcare app for DVHacks 2019.
 
-_created by: Vishakh Arora, Shubham Kumar, Shlok Mehrotra, and Pranav Srisankar_
+_created by: Vishakh Arora, Shubham Kumar, and Shlok Mehrotra_
 
 
 ### Problem we wish to solve
